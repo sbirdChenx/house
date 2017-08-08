@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias type="com.chenx.model.Contacter" alias="Contacter"/>
+        <typeAlias type="com.chenx.model.District" alias="District"/>
+        <typeAlias type="com.chenx.model.House" alias="House"/>
+        <typeAlias type="com.chenx.model.HousePhoto" alias="HousePhoto"/>
+        <typeAlias type="com.chenx.model.HouseType" alias="HouseType"/>
+        <typeAlias type="com.chenx.model.Street" alias="Street"/>
+        <typeAlias type="com.chenx.model.User" alias="User"/>
+        <typeAlias type="com.chenx.model.SearchDTO" alias="SearchDTO"/>
+    </typeAliases>
+    <mappers>
+        <mapper resource="com/chenx/mapper/HouseMapper.xml"/>
+        <mapper resource="com/chenx/mapper/UserMapper.xml"/>
+        <mapper resource="com/chenx/mapper/DistrictMapper.xml"/>
+        <mapper resource="com/chenx/mapper/HousePhotoMapper.xml"/>
+        <mapper resource="com/chenx/mapper/HouseTypeMapper.xml"/>
+        <mapper resource="com/chenx/mapper/StreetMapper.xml"/>
+    </mappers>
+</configuration>

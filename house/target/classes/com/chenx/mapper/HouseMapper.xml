@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenx.mapper.HouseMapper">
+    <resultMap id="HouseResult" type="House">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="area" column="area"/>
+        <result property="floor" column="floor"/>
+        <result property="totalFloor" column="totalFloor"/>
+        <result property="price" column="price"/>
+        <result property="street" column="street"/>
+        <result property="detail" column="detail"/>
+        <result property="mainPhoto" column="mainPhoto"/>
+        <association property="contacter" javaType="Contacter">
+            <result property="contacterName" column="contacterName"/>
+            <result property="contacterTel" column="contacterTel"/>
+            <result property="contacterQQ" column="contacterQQ"/>
+            <result property="contacterEmail" column="contacterEmail"/>
+        </association>
+        <association property="houseType" resultMap="HouseTypeResult"/>
+        <association property="district" resultMap="DistrictResult"/>
+        <collection property="photos" resultMap="HousePhotoResult"></collection>
+    </resultMap>
+    <resultMap id="HousePhotoResult" type="HousePhoto">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+    <resultMap id="DistrictResult" type="District">
+        <id property="id" column="id"/>
+        <result property="name" column="dname"/>
+    </resultMap>
+    <resultMap id="HouseTypeResult" type="HouseType">
+        <id property="id" column="id"/>
+        <result property="name" column="htname"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="HouseResult">
+        select
+        h.id,area,contacterEmail,contacterName,contacterQQ,
+        contacterTel,detail,title,d.id,d.name dname,ht.id,ht.name as htname
+        from tb_house h
+        left outer join tb_district d on h.district_id = d.id
+        left outer join tb_house_type ht on h.house_type_id = ht.id
+    </select>
+    <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="House">
+        insert into tb_house
+        (area,contacterEmail,contacterName,contacterQQ
+        ,contacterTel,detail,floor,mainPhoto,price
+        ,street,title,totalFloor,district_id,house_type_id)
+        values(#{area},#{contacter.contacterEmail},#{contacter.contacterName},#{contacter.contacterQQ}
+        ,#{contacter.contacterTel},#{detail},#{floor},#{mainPhoto},#{price}
+        ,#{street},#{title},#{totalFloor},#{district.id},#{houseType.id})
+    </insert>
+    <select id="findByDynamic" parameterType="SearchDTO" resultMap="HouseResult">
+        select
+        h.id,area,contacterEmail,contacterName,contacterQQ,
+        contacterTel,floor,totalFloor,street
+        ,mainPhoto,detail,price,title,d.id,d.name dname,ht.id,ht.name htname
+        from tb_house h
+        left outer join tb_district d on h.district_id = d.id
+        left outer join tb_house_type ht on h.house_type_id = ht.id
+        <where>
+            <if test="title != null">
+                title like concat(concat('%', #{title}), '%')
+            </if>
+            <if test="districtId != 0">
+                and district_id = #{districtId}
+            </if>
+            <if test="houseTypeId != 0">
+                and house_type_id = #{houseTypeId}
+            </if>
+            <if test="hightPrice!=0">
+                and price between #{lowPrice} and #{hightPrice}
+            </if>
+            <if test="hightArea != 0">
+                and area between #{lowArea} and #{hightArea}
+            </if>
+        </where>
+    </select>
+
+</mapper>

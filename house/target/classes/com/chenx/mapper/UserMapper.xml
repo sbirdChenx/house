@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenx.mapper.UserMapper">
+    <resultMap id="UserResult" type="User">
+        <id property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="realname" column="realname"/>
+        <result property="tel" column="tel"/>
+    </resultMap>
+    <insert id="save" parameterType="User">
+        insert into tb_user
+        values(#{username},#{password},#{realname},#{tel})
+    </insert>
+    <select id="findByUsername" resultMap="UserResult">
+        select username from tb_user
+        where username = #{username}
+    </select>
+    <select id="findByUsernameAndPassword" resultMap="UserResult">
+        select * from tb_user
+        where username = #{arg0} and password = #{arg1}
+    </select>
+</mapper>
